@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from models import * 
+from .models import * 
 
 
-class StudntSerilaizer(serializers.ModelSerializer):
+class StudentSerilaizer(serializers.ModelSerializer):
     class Meta:
         model=Student
-        field=['name','age']
-        exclude=['id',]
-        field='__all__'
+        # field=['name','age']#for selected name ,age
+        # exclude=['id',]#for remove id 
+        fields='__all__'#for seleecting all models
+        
