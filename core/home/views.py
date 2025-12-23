@@ -17,3 +17,6 @@ def post_student(request):
     data=request.data
     print(data)
     return Response({'status':200,"payload":data,"message":'you sent'})
+
+
+
