@@ -14,5 +14,18 @@ class StudentSerilaizer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"error":"age cannot be less than 18"})
             
             return data
+        
+
+class CategorySerilazier(serializers.ModelSerializer):
+    class Meta:
+        model=Category
+        fields='__all__'
+
+
+class BookSerilazier(serializers.ModelSerializer):
+    class Meta:
+        model=Book
+        fields='__all__'
+
 
         

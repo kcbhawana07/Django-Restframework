@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Student
-from .serializers import StudentSerilaizer
+from .models import Student,Book,Category
+from .serializers import StudentSerilaizer,BookSerilazier,CategorySerilazier
 # Create your views here.
 
 @api_view(['GET'])
@@ -46,6 +46,29 @@ def update_student(request,id):
     
     except Exception as e:
         return Response({"status":403,"message":"invalid id"})
+    
+
+@api_view(['GET'])
+def get_book(request):
+    book_obj=Book.objects.all()
+    serializer=BookSerilazier(book_obj,many=True)
+    return Response({"status":200,"playload":serializer.data})
+
+
+@api_view(['GET'])
+def get_category(request):
+    category_obj=Category.objects.all()
+    serializer=CategorySerilazier(category_obj,many=True)
+    return Response({"status":200,"playload":serializer.data})
+
+
+@api_view(['GET'])
+def get_student(request):
+    student_obj=Student.objects.all()
+    serializer=StudentSerilaizer(student_obj,many=True)
+    return Response({"status":200,"playload":serializer.data})
+
+
 
 
 
