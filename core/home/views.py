@@ -14,9 +14,43 @@ def home(request):
 
 @api_view(['POST'])
 def post_student(request):
-    data=request.data
-    print(data)
-    return Response({'status':200,"payload":data,"message":'you sent'})
+    serializer=StudentSerilaizer(data=request.data)
+
+    if request.data['age']<18:
+        return Response({"status":403,"message":"age must be >18"})
+      
+    if not serializer.is_valid():
+        print(serializer.errors)
+    return Response({'status':403,"error":serializer.errors,"message":'you sent'})
+
+
+
+@api_view(['DELETE'])
+def delete(request):
+    student_obj=Student.objects.all()
+    serializer=StudentSerilaizer(student_obj,many=True)
+    return Response ({"status":200,"message":'Hello from django rest framework for deleted','payload':serializer.data})
+
+
+@api_view(['PUT'])
+def update_student(request,id):
+    try:
+        student_obj=Student.objects.all(id=id)
+        serializer=StudentSerilaizer(data=request.data)
+        if not serializer.is_valid():
+         print(serializer.errors)
+        return Response ({"status":200,'errors':serializer.errors,"message":'Hello from django rest framework for updates '})
+    
+        serializer.save()
+        return Response({"status":200,"playload":serializer.data}) 
+    
+    except Exception as e:
+        return Response({"status":403,"message":"invalid id"})
+
+
+
+
+
 
 
 
