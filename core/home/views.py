@@ -2,7 +2,13 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Student,Book,Category
-from .serializers import StudentSerilaizer,BookSerilazier,CategorySerilazier
+from .serializers import StudentSerilaizer,BookSerilazier,CategorySerilazier,UserSerializer
+from rest_framework.views import APIView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 # Create your views here.
 
 @api_view(['GET'])
@@ -67,6 +73,60 @@ def get_student(request):
     student_obj=Student.objects.all()
     serializer=StudentSerilaizer(student_obj,many=True)
     return Response({"status":200,"playload":serializer.data})
+
+
+
+
+
+
+
+
+
+class StudentAPI(APIView):
+    def get(self,request):
+        pass
+    def post(self,request):
+        pass
+    def put(self,request):
+        pass
+    def patch(self,request):
+        pass
+    def delete(self,request):
+        pass
+
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
+    
+
+
+from rest_framework.authentication import TokenAuthentication
+class RegisterUser(APIView):
+    def post(self,request):
+     serializer=UserSerializer(data=request.data)
+
+     if not serializer.is_valid():
+         print(serializer.errors)
+         return Response({"status":403,"error":serializer.errors,"message":"user token authentication"})
+     
+     serializer.save()
+     user=User.objects.get(username=serializer.data['username'])
+     token_obj=Token.objects.get_or_create(user=user)
+     return Response({"status":200,"token":str(token_obj),"playload":serializer.data,"message":"save your data"})
+
+
+
 
 
 
