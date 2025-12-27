@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from rest_framework import generics
 # Create your views here.
 
 @api_view(['GET'])
@@ -127,9 +128,14 @@ class RegisterUser(APIView):
 
 
 
+class GenericView(generics.ListAPIView,generics.CreateAPIView):
+    queryset=Student.objects.all() 
+    serializer_class=StudentSerilaizer
 
-
-
+class GenericDelete(generics.DestroyAPIView):
+    queryset=Student.objects.all()
+    serializer_class=StudentSerilaizer
+    lookup_field="id"
 
 
 

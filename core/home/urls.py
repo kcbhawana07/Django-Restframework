@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import home,post_student,update_student,get_book,get_category,StudentAPI,RegisterUser
+from .views import home,post_student,update_student,get_book,get_category,StudentAPI,RegisterUser,GenericView,GenericDelete
 from rest_framework.authtoken import views
 
 urlpatterns = [
@@ -11,7 +11,9 @@ urlpatterns = [
     # path('get-book/',views.get_book),
     # path('category/',views.get_category),
     path('api-token-auth/', views.obtain_auth_token),
-    path('register/',RegisterUser.as_view())
+    path('register/',RegisterUser.as_view()),
+    path('generic_views/',GenericView.as_view()),
+    path("generic_views/<id>/",GenericDelete.as_view())
 ]
 
 
